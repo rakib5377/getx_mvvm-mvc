@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:getx_mvvm/resources/routes/routes_name.dart';
 import 'package:getx_mvvm/view/home/home_view.dart';
 import 'package:getx_mvvm/view/login/login_view.dart';
+import 'package:getx_mvvm/view/settings/settings.dart';
 import 'package:getx_mvvm/view/splash_view/splash_view.dart';
 
 class AppRoutes {
@@ -24,5 +25,9 @@ class AppRoutes {
       transition: Transition.leftToRightWithFade,
       transitionDuration: Duration(milliseconds: 250)
     ),
+    GetPage(name: RouteName.settingsView, page: ()=> Settings(),
+    transition: Transition.leftToRightWithFade,
+      transitionDuration: Duration(milliseconds: 300)
+    )
   ];
 }

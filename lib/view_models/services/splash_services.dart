@@ -9,22 +9,33 @@ import 'package:getx_mvvm/view_models/controller/user_preference/user_preference
 
 class SplashServices {
   UserPreference userPreference = UserPreference();
-  void isLogin() async{
+  Future<void> isLogin() async{
 
     userPreference.getUser().then((value){
 
       if (kDebugMode) {
         print("initial token: ${value.token}");
+        print("isLogin: ${value.isLogin}");
       }
-      if(value.token!.isEmpty || value.token.toString() == 'null'){
-        Timer(Duration(seconds: 3),(){
-          Get.toNamed(RouteName.loginView);
-        });
+      try{
+        final token = value.token;
+        final isLogin = value.isLogin;
+        //if(token.toString() == 'null' || (token ?? '').isEmpty || token == null){
+        if(isLogin == null ||  isLogin == false || isLogin.toString() == 'null'){
+          Timer(Duration(seconds: 3),(){
+            Get.toNamed(RouteName.loginView);
+          });
+        }
+        else{
+          Timer(Duration(seconds: 3),(){
+            Get.toNamed(RouteName.homeView);
+          });
+        }
       }
-      else{
-        Timer(Duration(seconds: 3),(){
-          Get.toNamed(RouteName.homeView);
-        });
+      catch(e){
+        if (kDebugMode) {
+          print('Error on start: $e');
+        }
       }
     });
 

@@ -28,24 +28,38 @@ class LoginViewModel extends GetxController {
     };
     _api.loginApi(data).then((value){
       loading.value = false;
-      Utils.snackBar('Login', "Login Successful");
-      userPreference.saveUser(UserModel.fromJson(value)).then((value){
-        Get.toNamed(RouteName.homeView);
-        if (kDebugMode) {
-          print('User session saved');
-        }
-      }).onError((error, stackTrace){
-        if (kDebugMode) {
-          print('Failed to save user session$error');
-        }
-      });
-      if (kDebugMode) {
-        print('logon$value');
+      if(value['error'] == 'user not found'){
+        Utils.snackBar('Login', value['error']);
       }
+      else{
+        UserModel userModel = UserModel(
+          token: value['token'],
+          isLogin: true
+        );
+        Utils.snackBar('Login', "Login Successful");
+        //userPreference.saveUser(UserModel.fromJson(value)).then((value){
+        userPreference.saveUser(userModel).then((value){
+          Get.delete<LoginViewModel>();
+          Get.toNamed(RouteName.homeView)?.then((value){});
+          if (kDebugMode) {
+            print('User session saved');
+          }
+        }).onError((error, stackTrace){
+          if (kDebugMode) {
+            print('Failed to save user session$error');
+          }
+        });
+        if (kDebugMode) {
+          print('logon$value');
+        }
+      }
+
     }).onError((error, stackTrace){
       loading.value = false;
       Utils.snackBar('Error', error.toString());
-      print(error.toString());
+      if (kDebugMode) {
+        print(error.toString());
+      }
     });
   }
 }

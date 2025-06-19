@@ -10,20 +10,24 @@ class UserPreference {
 
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.setString('token', user.token.toString());
+    pref.setBool('isLogin', user.isLogin!);
     return true;
   }
 
   Future<UserModel> getUser() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     String? token =  pref.getString('token');
+    bool? isLogin = pref.getBool('isLogin');
     return UserModel(
-      token: token
+      token: token,
+      isLogin: isLogin
     );
   }
 
   Future<bool> removeUser() async{
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.remove('token');
+    pref.remove('isLogin');
     return true;
   }
 
